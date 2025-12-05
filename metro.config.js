@@ -15,6 +15,4 @@ config.server = {
   },
 };
 
-config.server.host = '0.0.0.0';
-
 module.exports = config;
