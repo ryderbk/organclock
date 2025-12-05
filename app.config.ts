@@ -8,12 +8,15 @@ export default (): ExpoConfig => ({
   version: '1.0.0',
   orientation: 'portrait',
   assetBundlePatterns: ['**/*'],
+    splash: {
+    "backgroundColor": "#0b0d12"
+  },
   android: {
     package: 'com.activitylogger.app',
     adaptiveIcon: { backgroundColor: '#0b0d12' }
   },
   extra: {
-    eas: { projectId: process.env.EAS_PROJECT_ID ?? '' },
+    eas: { projectId: process.env.EAS_PROJECT_ID },
     firebase: {
       apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
