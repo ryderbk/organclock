@@ -9,8 +9,13 @@ import { cleanupExpiredScheduleMessages } from './src/services/messageService';
 
 export default function App() {
     useEffect(() => {
+        if (!auth) {
+            console.warn('Firebase not configured - auth features disabled');
+            return;
+        }
+        
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (user && user.uid) {
+            if (user && user.uid && db) {
                 try {
                     // Check if user is an admin
                     const userDoc = await getDoc(doc(db, 'users', user.uid));

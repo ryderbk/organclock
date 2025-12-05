@@ -22,7 +22,7 @@ import AdminHome from '@/screens/AdminHome';
 import AdminSubUsers from '@/screens/AdminSubUsers';
 import AdminLivePoints from '@/screens/AdminLivePoints';
 import AdminSpecialPoints from '@/screens/AdminSpecialPoints';
-import { Text, StyleSheet, Alert } from 'react-native';
+import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
@@ -117,12 +117,19 @@ export default function RootNavigator() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [role, setRole] = useState<Role | null>(null);
+    const [configError, setConfigError] = useState(false);
 
     useEffect(() => {
+        if (!auth || !db) {
+            setConfigError(true);
+            setLoading(false);
+            return;
+        }
+        
         const unsub = onAuthStateChanged(auth, async (u) => {
             setUser(u);
             setLoading(false);
-            if (u) {
+            if (u && db) {
                 const userRef = doc(db, 'users', u.uid);
                 const snap = await getDoc(userRef);
                 if (!snap.exists()) {
@@ -157,6 +164,21 @@ export default function RootNavigator() {
         return unsub;
     }, []);
 
+    if (configError) {
+        return (
+            <View style={styles.configError}>
+                <Ionicons name="settings-outline" size={64} color="#6366f1" />
+                <Text style={styles.configTitle}>Firebase Setup Required</Text>
+                <Text style={styles.configText}>
+                    To use this app, please configure your Firebase credentials in the environment variables.
+                </Text>
+                <Text style={styles.configHint}>
+                    Set EXPO_PUBLIC_FIREBASE_* variables in your .env file
+                </Text>
+            </View>
+        );
+    }
+
     if (loading || (user && role === null)) {
         return <Text style={styles.loading}>Loading...</Text>;
     }
@@ -183,4 +205,32 @@ export default function RootNavigator() {
 
 const styles = StyleSheet.create({
     loading: { color: '#e5e7eb', textAlign: 'center', marginTop: 64 },
+    configError: { 
+        flex: 1, 
+        backgroundColor: '#0b0d12', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        padding: 32,
+    },
+    configTitle: { 
+        color: '#e5e7eb', 
+        fontSize: 24, 
+        fontWeight: '700',
+        marginTop: 24,
+        marginBottom: 16,
+        textAlign: 'center',
+    },
+    configText: { 
+        color: '#94a3b8', 
+        fontSize: 16, 
+        textAlign: 'center',
+        lineHeight: 24,
+    },
+    configHint: { 
+        color: '#6366f1', 
+        fontSize: 14, 
+        textAlign: 'center',
+        marginTop: 24,
+        fontFamily: 'monospace',
+    },
 });
