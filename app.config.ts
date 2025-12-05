@@ -8,8 +8,11 @@ export default (): ExpoConfig => ({
   version: '1.0.0',
   orientation: 'portrait',
   assetBundlePatterns: ['**/*'],
-    splash: {
+  splash: {
     "backgroundColor": "#0b0d12"
+  },
+  web: {
+    bundler: 'metro'
   },
   android: {
     package: 'com.activitylogger.app',
