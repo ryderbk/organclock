@@ -11,12 +11,15 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
+    "@expo/config": "^12.0.11",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
+    "@types/node": "^24.10.1",
+    "dotenv": "^17.2.3",
     "expo": "^51.0.0",
     "expo-constants": "~16.0.2",
     "expo-status-bar": "~1.12.1",
